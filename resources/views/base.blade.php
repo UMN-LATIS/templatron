@@ -8,13 +8,13 @@
 
     	<meta name="csrf-token" content="{{ csrf_token() }}">
     	<link rel="stylesheet" href="/umn/css/2015-tc.css">
-						<script src="https://kit.fontawesome.com/058fe9ce66.js" crossorigin="anonymous"></script>
+						
     	<script src="/umn/js/umnhf-2015.js" type="text/javascript"></script>
 		<script src="/umn/js/html5shiv-printshiv.js" type="text/javascript"></script>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
-		{{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous"> --}}
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 	    <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
 
 			@yield('header')

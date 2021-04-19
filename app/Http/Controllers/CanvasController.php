@@ -22,20 +22,19 @@ class CanvasController extends Controller
             return abort(403);
         }
 
-        
         $emplId = Auth::user()->emplId;
 
         $canvasUserInfo = $this->canvas->getUser($emplId);
         $userCourses = $this->canvas->getUserCourses($canvasUserInfo->id);
 
-        return collect($userCourses)->filter(function($value, $key) {
+        $data = collect($userCourses)->filter(function($value, $key) {
             return (collect($value->enrollments)->filter(function($value, $key) {
                 return $value->role == "TeacherEnrollment" || $value->role == "DesignerEnrollment";
             })->count() > 0);
-        })->sortByDesc("enrollment_term_id");
+        })->sortByDesc("enrollment_term_id")->values();
+        return response()->json($data);
 
     }
-
     
     public function createMigration(Request $request) {
         

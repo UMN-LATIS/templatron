@@ -2,9 +2,16 @@
     <div>
 
         <div class="row justify-content-center mt-0">
-            <div class="col-11 col-sm-9 col-md-9 col-lg-8 text-center p-0 mt-3 mb-2">
+            <div class="col-11 col-sm-9 col-md-9 col-lg-8 text-center p-0 mb-2">
+                <div class="d-flex justify-content-center">
+                <div class="ellipse">
+                    <h1>Templatron</h1>
+                </div>
+                </div>
+
+                    
                 <div class="card px-0 pt-4 pb-2 mt-3 mb-3">
-                    <h1>Welcome to Templatron</h1>
+
                     <div class="row">
                         <div class="col-md-12 mx-0">
                             <ul id="progressbar">
@@ -39,7 +46,7 @@
                             </div>
                             <div v-if="stage==2">
                                 <h2>Ready to go?</h2>
-                                <div class="col-sm-6 offset-sm-3 text-left">
+                                <div class="col-sm-9 offset-sm-0 text-left">
                                 <p>Target Course: <strong> {{ selectedCourse.name }}</strong></p>
                                 <p>Source Template: <strong> {{ template.name }}</strong></p>
                                 <button @click="stage=1" class="btn btn-primary" ><i class="fas fa-arrow-left"></i> Back</button>
@@ -106,16 +113,19 @@
 
     #progressbar #course:before {
         font-family: "Font Awesome 5 Free";
+        font-weight: 900;
         content: "\f5da"
     }
 
     #progressbar #template:before {
         font-family: "Font Awesome 5 Free";
+        font-weight: 900;
         content: "\f0c5"
     }
 
     #progressbar #confirm:before {
         font-family: "Font Awesome 5 Free";
+        font-weight: 900;
         content: "\f09d"
     }
 
@@ -153,4 +163,20 @@
         z-index: 0
     }
 
+
+.ellipse {
+        /* position: absolute; */
+        /* top: 50%; */
+        /* left: 50%; */
+        /* transform: translate(-50%, -50%); */
+        height: 100px;
+        width: 80%;
+        /* left: 10%; */
+        margin-bottom: -30px;
+        border-radius: 0 0 500px 500px;
+        background-color: skyblue;
+        color: white;
+        padding-top: 1.4em;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+    }
 </style>

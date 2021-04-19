@@ -76,9 +76,10 @@
 }
 .checkbox_options  input[type="radio"]:checked + label::after {
     color: hsla(215, 5%, 25%, 1);
-    font-family: 'Material Icons';
     border: 2px solid #17a2b8;
-    content: "\e876";
+    content: "\f00c";
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
     font-size: 24px;
     position: absolute;
     top: -25px;

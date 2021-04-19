@@ -106,7 +106,6 @@ class Canvas
 
             throw new RuntimeException($errorMessage);
         }
-
     }
 
     public function createContentMigration(int $targetCourseId, int $sourceCourseId) : object{
@@ -135,6 +134,23 @@ class Canvas
             $msg = $e->getMessage();
             $errorMessage = 'getMigrationProgress Error: ' . $msg;
 
+            throw new RuntimeException($errorMessage);
+        }
+    }
+
+
+    public function getTerms() : array {
+        if(Cache::has("terms")) {
+            return Cache::get("terms");
+        }
+        try {
+            $result = $this->client->get("accounts/1/terms");
+            $terms = json_decode($result->getBody());
+            Cache::put("terms", $terms->enrollment_terms, 600);
+            return $terms->enrollment_terms;
+        } catch (RequestException $e) {
+            $msg = $e->getMessage();
+            $errorMessage = 'GetCourse Error: ' . $msg;
             throw new RuntimeException($errorMessage);
         }
     }
