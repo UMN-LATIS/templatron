@@ -49,9 +49,17 @@
                                 <div class="col-sm-9 offset-sm-0 text-left">
                                 <p>Target Course: <strong> {{ selectedCourse.name }}</strong></p>
                                 <p>Source Template: <strong> {{ template.name }}</strong></p>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" v-model="acknowledge" name="" id="" value="on">
+                                    I understand that this may overwrite any existing changes to my Canvas site.
+                                  </label>
+                                </div>
+                                <div class="mt-2">
                                 <button @click="stage=1" class="btn btn-primary" ><i class="fas fa-arrow-left"></i> Back</button>
-                                <button class="btn btn-success" @click="triggerImport" v-if="!submitted">Import!</button>
+                                <button class="btn btn-success" @click="triggerImport" v-if="!submitted" :disabled="!acknowledge">Import!</button>
                                 <p v-if="submitted"><strong>Woohoo!</strong> Your import is running. Check <a :href="'https://canvas.umn.edu/courses/' + this.selectedCourse.id">Canvas</a> in a minute or two.</p>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +80,8 @@
                 selectedCourse: null,
                 stage: 0,
                 template: null,
-                submitted: false
+                submitted: false,
+                acknowledge: false
             }
         },
         methods: {

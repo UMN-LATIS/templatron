@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::group(['prefix'=>'/api/', 'middleware' => ['auth']], function () {
     Route::get('/canvas', "CanvasController@index");
     Route::get('/template', "TemplateController@index");
