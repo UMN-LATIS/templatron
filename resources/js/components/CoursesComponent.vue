@@ -20,7 +20,7 @@ export default {
             var outputArray = [];
             var currentTerm = null;
             
-            for(const course of this.courses) {
+            for(const course of this.courses.filter(c => c.workflow_state == "unpublished")) {
                 if(currentTerm != course.enrollment_term_id) {
                     var term = this.terms.filter(t => t.id == course.enrollment_term_id);
                     if(term.length > 0) {
