@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div v-if="stage==1">
-                                <template-list v-model="template"></template-list>
+                                <template-list v-model="template" :accountid="selectedCourse.account_id"></template-list>
                                
                                 <div class="mt-2">
                                 <!-- https://bbbootstrap.com/snippets/multi-step-form-wizard-30467045 -->

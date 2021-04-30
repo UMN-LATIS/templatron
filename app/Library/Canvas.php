@@ -150,7 +150,23 @@ class Canvas
             return $terms->enrollment_terms;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
-            $errorMessage = 'GetCourse Error: ' . $msg;
+            $errorMessage = 'GetTerms Error: ' . $msg;
+            throw new RuntimeException($errorMessage);
+        }
+    }
+
+    public function getAccount(int $accountId) : object {
+        if(Cache::has("account_" . $accountId)) {
+            return Cache::get("account_" . $accountId);
+        }
+        try {
+            $result = $this->client->get("accounts/" . $accountId);
+            $account = json_decode($result->getBody());
+            Cache::put("account_" . $accountId, $account, 600);
+            return $account;
+        } catch (RequestException $e) {
+            $msg = $e->getMessage();
+            $errorMessage = 'GetAccount Error: ' . $msg;
             throw new RuntimeException($errorMessage);
         }
     }

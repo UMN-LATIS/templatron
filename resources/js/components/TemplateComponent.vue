@@ -28,9 +28,9 @@
                 selectedTemplate: this.value
             }
         },
-        props: ["value"],
+        props: ["value", "accountid"],
         mounted() {
-            axios.get("/api/template")
+            axios.get("/api/template?account_id=" + this.accountid)
                 .then(res => {
                     this.templates = res.data.templates;
                 });
