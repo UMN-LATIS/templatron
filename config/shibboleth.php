@@ -94,14 +94,15 @@ return array(
 
     // Note: when using local-sp, these need to be the full unmapped attributes from Shib
     
-    'user' => [
+   'user' => [
         // fillable user model attribute => server variable
-        'email'       => 'mail',
-        'name'        => 'displayName',
-        'emplid'        => 'emplid',
-        'umndid'  => 'uid',
+        'emplid'      => 'urn:oid:2.16.840.1.113730.3.1.3',
+        'email'       => 'urn:oid:0.9.2342.19200300.100.1.3',
+        'umndid' => 'urn:oid:0.9.2342.19200300.100.1.1',
+        'name' => 'urn:oid:2.16.840.1.113730.3.1.241',
+        'first_name'  => 'urn:oid:2.5.4.42',
+        'last_name'   => 'urn:oid:2.5.4.4',
     ],
-
     /*
     |--------------------------------------------------------------------------
     | User Creation and Groups Settings
