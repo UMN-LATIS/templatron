@@ -22,6 +22,9 @@
         "sentry/sentry-laravel": "^2.4"
     },
     "require-dev": {
+        "deployer/deployer": "^6.8",
+        "deployer/dist": "^6.8",
+        "deployer/recipes": "^6.2",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
