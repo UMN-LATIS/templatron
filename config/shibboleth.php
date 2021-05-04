@@ -97,8 +97,8 @@ return array(
    'user' => [
         // fillable user model attribute => server variable
         'emplid'      => 'urn:oid:2.16.840.1.113730.3.1.3',
-        'email'       => 'urn:oid:0.9.2342.19200300.100.1.3',
-        'umndid' => 'urn:oid:0.9.2342.19200300.100.1.1',
+        'email'       => 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
+        'umndid' => 'https://www.umn.edu/shibboleth/attributes/umnDID',
         'name' => 'urn:oid:2.16.840.1.113730.3.1.241',
         'first_name'  => 'urn:oid:2.5.4.42',
         'last_name'   => 'urn:oid:2.5.4.4',
