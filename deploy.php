@@ -7,7 +7,7 @@ require 'recipe/laravel.php';
 // Project name
 set('application', 'templatron');
 
-set('keep_releases', 3);
+set('keep_releases', 2);
 
 // Project repository
 set('repository', 'git@github.com:UMN-LATIS/templatron.git');
