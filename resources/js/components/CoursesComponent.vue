@@ -1,46 +1,48 @@
 <template>
-    <select v-model="selectedCourseId" @change="$emit('input', selectedCourseId)" class="form-control">
-        <option v-for="course in mergedCourse" :key="course.id" :value="course" :disabled="course.account_id == undefined">{{course.name}}</option>
-    </select>
+    <div>
+        <div class="form-group col-12">
+            <div class="form-inline">
+            <label for="">Course ID: </label>
+            <div class="input-group">
+                <input type="text" class="form-control" v-model="selectedCourseId">
+                <div class="input-group-append">
+                    <a @click="validate" class="btn btn-success" href="#" role="button">Validate <i class="fas fa-check" v-if="success"></i></a>
+                </div>
+            </div>
+            </div>
+            <small id="helpId" class="form-text text-muted">Enter the Course ID you'd like to apply a template to. This
+                is a six digit number - you'll see at the end of the address in Canvas.</small>
+        </div>
+
+    </div>
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            selectedCourseId: this.value,
-            courses: [],
-            terms: []
-        }
-    },
-    props: ["value"],
-    computed: {
-        mergedCourse: function() {
-
-            var outputArray = [];
-            var currentTerm = null;
-            
-            for(const course of this.courses.filter(c => c.workflow_state == "unpublished")) {
-                if(currentTerm != course.enrollment_term_id) {
-                    var term = this.terms.filter(t => t.id == course.enrollment_term_id);
-                    if(term.length > 0) {
-                        outputArray.push(term[0]);
-                    }
-                    
-                }
-                currentTerm = course.enrollment_term_id;
-                outputArray.push(course);
+    export default {
+        data() {
+            return {
+                selectedCourseId: this.value?this.value.id:null,
+                success: false
             }
-            
-            return outputArray;
+        },
+        props: ["value"],
+        methods: {
+            validate: function () {
+                axios.get("/api/canvas/validateCourse/" + this.selectedCourseId)
+                    .then(res => {
+                        if (res.data) {
+                            this.$emit('input', res.data);
+                            this.success = true;
+
+                        }
+                    })
+                    .catch(err => {
+                        alert("Invalid course ID, or you're not an teacher/designer for that course");
+                    });
+            }
+        },
+        mounted: function () {
 
         }
-    },
-    mounted: function() {
-        axios.get("/api/canvas")
-        .then((result) => { this.courses = result.data});
-        axios.get("/api/terms")
-        .then((result) => { this.terms = result.data});
     }
-}
 </script>

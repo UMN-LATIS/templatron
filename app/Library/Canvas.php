@@ -108,6 +108,23 @@ class Canvas
         }
     }
 
+    public function getTeachersForCourse(int $courseId): array {
+        if(Cache::has("course_teachers_" . $courseId)) {
+            return Cache::get("course_teachers_" . $courseId);
+        }
+        try {
+            $result = $this->client->get("courses/" . $courseId . "/users" . "?" . http_build_query(["enrollment_type[]"=>"teacher"]) . "&" . http_build_query(["enrollment_type[]"=>"designer"]));
+            $course = json_decode($result->getBody());
+            Cache::put("course_teachers_" . $courseId, $course, 600);
+            return $course;
+        } catch (RequestException $e) {
+            $msg = $e->getMessage();
+            $errorMessage = 'GetCourse Error: ' . $msg;
+
+            throw new RuntimeException($errorMessage);
+        }
+    }
+
     public function createContentMigration(int $targetCourseId, int $sourceCourseId) : object{
 
         try {

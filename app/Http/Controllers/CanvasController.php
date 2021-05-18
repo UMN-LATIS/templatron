@@ -41,4 +41,16 @@ class CanvasController extends Controller
         $migrationInfo = $this->canvas->createContentMigration($targetCourse, $sourceCourse);
         return $migrationInfo->id;
     }
+
+    public function validateUserCanMigrateCourse(Request $req, int $course) {
+        $user = Auth::user()->emplid;
+        $canvasUserInfo = $this->canvas->getUser($user);
+        $userList = $this->canvas->getTeachersForCourse($course);
+        if(collect($userList)->pluck("id")->contains($canvasUserInfo->id)) {
+            return response()->json($this->canvas->getCourse($course));
+        }
+        else {
+            abort(403);
+        }
+    }
 }

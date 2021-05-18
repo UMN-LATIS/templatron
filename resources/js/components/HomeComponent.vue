@@ -24,11 +24,8 @@
                             </ul>
 
                             <div v-if="stage==0" class="">
-                                <form class="form-inline d-flex justify-content-center">
-                                    <div class="form-group">
-                                        <label for="" class="mr-2">Course to modify:</label>
+                                <form class="form d-flex justify-content-center">
                                         <course-dropdown v-model="selectedCourse"></course-dropdown>
-                                    </div>
                                 </form>
                                 <div class="mt-2">
                                 <!-- https://bbbootstrap.com/snippets/multi-step-form-wizard-30467045 -->
