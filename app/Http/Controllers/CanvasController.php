@@ -16,8 +16,6 @@ class CanvasController extends Controller
 
 
     public function index() {
-        Auth::user()->emplId = 2328381;
-
         if(!Auth::user()->emplId) {
             return abort(403);
         }
