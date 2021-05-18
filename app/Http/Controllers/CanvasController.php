@@ -16,11 +16,11 @@ class CanvasController extends Controller
 
 
     public function index() {
-        if(!Auth::user()->emplId) {
+        if(!Auth::user()->emplid) {
             return abort(403);
         }
 
-        $emplId = Auth::user()->emplId;
+        $emplId = Auth::user()->emplid;
 
         $canvasUserInfo = $this->canvas->getUser($emplId);
         $userCourses = $this->canvas->getUserCourses($canvasUserInfo->id);

@@ -16,9 +16,7 @@ class TermsController extends Controller
 
 
     public function index() {
-        Auth::user()->emplId = 2328381;
-
-        if(!Auth::user()->emplId) {
+        if(!Auth::user()->emplid) {
             return abort(403);
         }
         return $this->canvas->getTerms();
