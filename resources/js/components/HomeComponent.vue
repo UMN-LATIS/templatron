@@ -24,7 +24,7 @@
                             </ul>
 
                             <div v-if="stage==0" class="">
-                                <form class="form d-flex justify-content-center">
+                                <form class="form d-flex justify-content-left">
                                         <course-dropdown v-model="selectedCourse"></course-dropdown>
                                 </form>
                                 <div class="mt-2">
