@@ -10,7 +10,8 @@
                 </div>
             </div>
             </div>
-            <p v-if="value" class="text-left">Course: {{ value.name}}</p>
+            <p v-if="value" class="text-left">Course: {{ value.name}} - <strong>{{ value.course_code}}</strong> </p>
+            
             <small id="helpId" class="form-text text-muted">Enter the Course ID you'd like to apply a template to. This
                 is a six digit number - you'll see at the end of the address in Canvas.</small>
         </div>
