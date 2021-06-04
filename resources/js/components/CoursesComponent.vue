@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="form-group col-12">
+        <div class="col-12">
             <div class="form-inline">
             <label for="">Course ID </label>
             <div class="input-group ml-2">
@@ -10,10 +10,18 @@
                 </div>
             </div>
             </div>
-            <p v-if="value" class="text-left">Course: {{ value.name}} - <strong>{{ value.course_code}}</strong> </p>
-            
-            <small id="helpId" class="form-text text-muted">Enter the Course ID you'd like to apply a template to. This
-                is a six digit number - you'll see at the end of the address in Canvas.</small>
+
+            <small id="helpId" class="form-text text-muted">Enter the Course ID for the Canvas site into which you would like to import a template. The Course ID is a six digit number that you will see at the end of the Canvas site URL in your browser's address bar.</small>
+            <template v-if="value">
+            <div class="mt-2 alert alert-danger" role="alert" v-if="value && value.workflow_state == 'available'">
+                <strong>Warning:</strong> This course has already been published.
+            </div>
+
+                <p><strong>Course:</strong> {{ value.name}} </p>
+                <p><strong>Course Code:</strong> {{ value.course_code }} </p>
+            </template>
+
+            <!-- <img src="/images/canvas_course_id.png"> -->
         </div>
 
     </div>

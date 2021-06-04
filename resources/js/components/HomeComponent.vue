@@ -2,11 +2,11 @@
     <div>
 
         <div class="row justify-content-center mt-0">
-            <div class="col-11 col-sm-9 col-md-9 col-lg-8 text-center p-0 mb-2">
-                <div class="d-flex justify-content-center">
-                <div class="ellipse">
-                    <h1>Templatron</h1>
-                </div>
+            <div class="col-11 col-sm-9 col-md-9 col-lg-8 p-0 mb-2">
+                <div class="d-flex justify-content-center  text-center ">
+                    <div class="ellipse">
+                        <h1>Templatron</h1>
+                    </div>
                 </div>
 
                     
@@ -14,7 +14,7 @@
 
                     <div class="row">
                         <div class="col-md-12 mx-0">
-                            <ul id="progressbar">
+                            <ul id="progressbar" class="text-center">
                                 <li v-bind:class="{active : stage==0}" id="course">
                                     <strong>Course</strong></li>
                                 <li v-bind:class="{active : stage==1}" id="template">
@@ -24,10 +24,10 @@
                             </ul>
 
                             <div v-if="stage==0" class="">
-                                <form class="form d-flex justify-content-left">
-                                        <course-dropdown v-model="selectedCourse"></course-dropdown>
+                                <form class="form col-sm-8">
+                                    <course-dropdown v-model="selectedCourse"></course-dropdown>
                                 </form>
-                                <div class="mt-2">
+                                <div class="mt-2  text-center  ">
                                 <!-- https://bbbootstrap.com/snippets/multi-step-form-wizard-30467045 -->
                                     <button @click="stage=1" class="btn btn-success" :disabled="selectedCourse == null">Next <i class="fas fa-arrow-right"></i></button>
                                 </div>
@@ -35,27 +35,32 @@
                             <div v-if="stage==1">
                                 <template-list v-model="template" :accountid="selectedCourse.account_id"></template-list>
                                
-                                <div class="mt-2">
+                                <div class="mt-2  text-center ">
                                 <!-- https://bbbootstrap.com/snippets/multi-step-form-wizard-30467045 -->
                                     <button @click="stage=0" class="btn btn-primary" ><i class="fas fa-arrow-left"></i> Back</button>
                                     <button @click="stage=2" class="btn btn-success" :disabled="template == null">Next <i class="fas fa-arrow-right"></i></button>
                                 </div>
                             </div>
                             <div v-if="stage==2">
+                                
+                                <div class="col-sm-9 offset-sm-0">
                                 <h2>Ready to go?</h2>
-                                <div class="col-sm-9 offset-sm-0 text-left">
                                 <p>Target Course: <strong> {{ selectedCourse.name }}</strong></p>
                                 <p>Source Template: <strong> {{ template.name }}</strong></p>
                                 <div class="form-check">
                                   <label class="form-check-label">
                                     <input type="checkbox" class="form-check-input" v-model="acknowledge" name="" id="" value="on">
-                                    I understand that this may overwrite any existing changes to my Canvas site.
+                                    I acknowledge that importing this template will not delete or overwrite any existing content in my Canvas site and that it is best to import templates into an empty Canvas site.
                                   </label>
                                 </div>
-                                <div class="mt-2">
+                                <div class="mt-2  text-center ">
                                 <button @click="stage=1" class="btn btn-primary" ><i class="fas fa-arrow-left"></i> Back</button>
                                 <button class="btn btn-success" @click="triggerImport" v-if="!submitted" :disabled="!acknowledge">Import!</button>
-                                <p v-if="submitted"><strong>Woohoo!</strong> Your import is running. Check <a :href="'https://canvas.umn.edu/courses/' + this.selectedCourse.id">Canvas</a> in a minute or two.</p>
+
+                                <div class="alert alert-success mt-2" role="alert"  v-if="submitted">
+                                    <strong>Woohoo!</strong> Templatron is importing this template into your <a :href="'https://canvas.umn.edu/courses/' + this.selectedCourse.id">Canvas site</a>. Please note that it may take a few minutes for the import process to complete."
+                                </div>
+                                
                                 </div>
                                 </div>
                             </div>
