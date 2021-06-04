@@ -16,9 +16,9 @@
             <div class="mt-2 alert alert-danger" role="alert" v-if="value && value.workflow_state == 'available'">
                 <strong>Warning:</strong> This course has already been published.
             </div>
-
-                <p><strong>Course:</strong> {{ value.name}} </p>
-                <p><strong>Course Code:</strong> {{ value.course_code }} </p>
+                <p><strong>Course Designator:</strong> {{ value.course_code }} </p>
+                <p><strong>Course Name:</strong> {{ value.name}} </p>
+                
             </template>
 
             <!-- <img src="/images/canvas_course_id.png"> -->
