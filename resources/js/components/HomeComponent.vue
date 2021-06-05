@@ -58,7 +58,7 @@
                                 <button class="btn btn-success" @click="triggerImport" v-if="!submitted" :disabled="!acknowledge">Import!</button>
 
                                 <div class="alert alert-success mt-2" role="alert"  v-if="submitted">
-                                    <strong>Woohoo!</strong> Templatron is importing this template into your <a :href="'https://canvas.umn.edu/courses/' + this.selectedCourse.id">Canvas site</a>. Please note that it may take a few minutes for the import process to complete."
+                                    <strong>Woohoo!</strong> Templatron is importing this template into your <a :href="'https://canvas.umn.edu/courses/' + this.selectedCourse.id">Canvas site</a>. Please note that it may take a few minutes for the import process to complete.
                                 </div>
                                 
                                 </div>
