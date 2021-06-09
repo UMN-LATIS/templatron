@@ -36,9 +36,10 @@ class CanvasController extends Controller
     }
     
     public function createMigration(Request $request) {
-        Log::info("Starting migration for:" . $targetCourse . " " . $sourceCourse . " " . Auth::user()->emplid);
+        
         $targetCourse = $request->get("selectedCourse");
         $sourceCourse = $request->get("template");
+        Log::info("Starting migration for:" . $targetCourse . " " . $sourceCourse . " " . Auth::user()->emplid);
         $migrationInfo = $this->canvas->createContentMigration($targetCourse, $sourceCourse);
         return $migrationInfo->id;
     }
