@@ -1,0 +1,19 @@
+{
+  "name": "templatron",
+  "version": "0.0.1",
+  "description": "Docs for the Templatron Project",
+  "main": "index.js",
+  "authors": {
+    "name": "Colin McFadden",
+    "email": "mcfa0086@umn.edu"
+  },
+  "repository": "http://github.com/umn-latis/templatron/templatron",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.5.3"
+  }
+}

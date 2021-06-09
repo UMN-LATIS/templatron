@@ -43,5 +43,6 @@ if (config('shibboleth.emulate_idp') ) {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index');
+    Route::get('/go', 'HomeController@go')->name("go");
     Route::any('{all}','HomeController@index')->where(['all' => '.*']);
 });
