@@ -50,6 +50,15 @@ class CanvasController extends Controller
             return response()->json($this->canvas->getCourse($course));
         }
         else {
+            // welp they're not attached to the course. We'll need to do the more expensive lookup.
+            $courseInfo =  $this->canvas->getCourse($course);
+            $adminsForSubaccount = $this->canvas->getAdminsForSubaccount($courseInfo->account_id, true);
+            if(collect($adminsForSubaccount)->filter(function($item) { 
+                return $item->role == "College/Program Assistant" || $item->role == "Instructor Course-Creation Support";
+            })->pluck("user.id")->contains($canvasUserInfo->id)) {
+                return response()->json($this->canvas->getCourse($course));
+            }
+
             abort(403);
         }
     }

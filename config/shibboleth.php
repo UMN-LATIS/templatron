@@ -58,12 +58,12 @@ return array(
     'emulate_idp'       => env('SHIB_EMULATE', false),
     'emulate_idp_users' => array(
         'admin' => array(
-            'uid'         => 'admin',
+            'https://www.umn.edu/shibboleth/attributes/umnDID'         => '3dci3yxub',
             'displayName' => 'Admin User',
             'givenName'   => 'Admin',
             'sn'          => 'User',
             'mail'        => 'admin@uwm.edu',
-            'emplid'     => '2328381'
+            'urn:oid:2.16.840.1.113730.3.1.3'     => '2328381'
         ),
         'staff' => array(
             'uid'         => 'staff',

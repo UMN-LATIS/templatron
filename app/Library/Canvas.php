@@ -8,7 +8,7 @@ use Exception;
 use RuntimeException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Cache;
-
+use GuzzleHttp\Psr7;
 
 class Canvas
 {
@@ -62,7 +62,7 @@ class Canvas
         try {
             $result = $this->client->get("users/sis_user_id:" . $emplId);
             $user = json_decode($result->getBody());
-            Cache::put("user_" . $emplId, $user, 600);
+            Cache::put("user_" . $emplId, $user, 60);
             return $user;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
@@ -79,9 +79,8 @@ class Canvas
         }
 
         try {
-            $result = $this->client->get("users/" . $userId . "/courses?per_page=300");
-            $courses = json_decode($result->getBody());
-            Cache::put("courses_" . $userId, $courses, 600);
+            $courses = $this->getPaginatedResults("users/" . $userId . "/courses?per_page=300");
+            Cache::put("courses_" . $userId, $courses, 60);
             return $courses;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
@@ -98,7 +97,7 @@ class Canvas
         try {
             $result = $this->client->get("courses/" . $courseId . "?" . http_build_query(["include[]"=>"course_image"]));
             $course = json_decode($result->getBody());
-            Cache::put("course_" . $courseId, $course, 600);
+            Cache::put("course_" . $courseId, $course, 60);
             return $course;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
@@ -115,7 +114,7 @@ class Canvas
         try {
             $result = $this->client->get("courses/" . $courseId . "/users" . "?" . http_build_query(["enrollment_type[]"=>"teacher"]) . "&" . http_build_query(["enrollment_type[]"=>"designer"]));
             $course = json_decode($result->getBody());
-            Cache::put("course_teachers_" . $courseId, $course, 600);
+            Cache::put("course_teachers_" . $courseId, $course, 60);
             return $course;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
@@ -163,7 +162,7 @@ class Canvas
         try {
             $result = $this->client->get("accounts/1/terms");
             $terms = json_decode($result->getBody());
-            Cache::put("terms", $terms->enrollment_terms, 600);
+            Cache::put("terms", $terms->enrollment_terms, 60);
             return $terms->enrollment_terms;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
@@ -179,12 +178,76 @@ class Canvas
         try {
             $result = $this->client->get("accounts/" . $accountId);
             $account = json_decode($result->getBody());
-            Cache::put("account_" . $accountId, $account, 600);
+            Cache::put("account_" . $accountId, $account, 60);
             return $account;
         } catch (RequestException $e) {
             $msg = $e->getMessage();
             $errorMessage = 'GetAccount Error: ' . $msg;
             throw new RuntimeException($errorMessage);
         }
+    }
+
+    public function getAdminsForSubaccount(int $subAccountId, bool $recursive): array {
+        if(Cache::has("subaccount_" . $subAccountId)) {
+            return Cache::get("subaccount_" . $subAccountId);
+        }
+
+        try {
+            $account = $this->getAccount($subAccountId);
+        }
+        catch (RuntimeException $e) {
+            // this might fail due to perms
+            return [];
+        }
+
+        try {
+            $url = "accounts/" . $subAccountId . "/admins?per_page=30";
+            $results = $this->getPaginatedResults($url);
+            
+            if($recursive) {
+                
+                $parent = $account->parent_account_id;
+                if($parent) {
+                    $results = array_merge($results, $this->getAdminsForSubaccount($parent, $recursive));
+                    Cache::put("subaccount_" . $subAccountId, $results, 60);
+                }
+            }
+            
+            return $results;
+            
+        }
+        catch (RequestException $e) {
+            $msg = $e->getMessage();
+            $errorMessage = 'GetSubAccount Error: ' . $msg;
+            throw new RuntimeException($errorMessage);
+        }
+
+    }
+
+    private function getPaginatedResults($url): array {
+        $pagination = true;
+        $results = [];
+        while($pagination == true) {
+            $result = $this->client->get($url);
+            $results = array_merge(json_decode($result->getBody()), $results);
+            if($parsed = Psr7\Header::parse($result->getHeader('Link'))) {
+                $linkHeaders = $this->parseLinkHeader($parsed);
+                if($linkHeaders["current"] == $linkHeaders["last"] || !isset($linkHeaders["next"])) {
+                    $pagination = false;
+                }
+                else {
+                    $url = $linkHeaders["next"];
+                }
+            }
+        }
+        return $results;
+    }
+
+    private function parseLinkHeader(array $headers) {
+        $paginationHeaders = [];
+        foreach ($headers as $header) {
+            $paginationHeaders[$header["rel"]] = str_replace(["<",">", $this->client->getConfig('base_uri')],'',$header[0]);
+        }
+        return $paginationHeaders;
     }
 }
