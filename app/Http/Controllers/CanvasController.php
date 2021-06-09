@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Library\Canvas;
 use Auth;
+use Log;
 
 class CanvasController extends Controller
 {
