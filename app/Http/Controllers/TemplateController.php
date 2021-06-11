@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Library\Canvas;
-
+use Str;
 class TemplateController extends Controller
 {
 
@@ -20,13 +20,18 @@ class TemplateController extends Controller
         $loadedTemplates = [];
         
         $templates = \App\Models\Template::all();
-        if($accountId = $req->get("account_id")) {
-            $account = $this->canvas->getAccount($accountId);
-            if($account) {
-                $templates = $templates->filter(function($value) use ($account){
-                    return stristr($account->name, $value->match_prefix);
-                }); 
+        $outputTemplateArray = array();
+        if($accounts = $req->get("account_ids")) {
+            $accountArray = explode(",", $accounts);
+            foreach($accountArray as $accountId) {
+                $account = $this->canvas->getAccount($accountId);
+                if($account) {
+                    $outputTemplateArray[] = $templates->filter(function($value) use ($account){
+                        return stristr($account->name, $value->match_prefix);
+                    }); 
+                }
             }
+            
             
         }
 
@@ -35,7 +40,7 @@ class TemplateController extends Controller
         }
         
         foreach($templates as $template) {
-            $loadedTemplates[] = $this->canvas->getCourse($template->course_id);
+            $loadedTemplates[$template->id] = $this->canvas->getCourse($template->course_id);
         }
 
 

@@ -33,7 +33,8 @@
                                 </div>
                             </div>
                             <div v-if="stage==1">
-                                <template-list v-model="template" :accountid="selectedCourse.account_id"></template-list>
+                                <template-list v-model="template" :accountid="selectedCourse.map(c => c.account_id).filter(function (value, index, array) { 
+return array.indexOf (value) == index;})"></template-list>
                                
                                 <div class="mt-2  text-center ">
                                 <!-- https://bbbootstrap.com/snippets/multi-step-form-wizard-30467045 -->
@@ -45,8 +46,10 @@
                                 
                                 <div class="col-sm-9 offset-sm-0">
                                 <h2>Ready to go?</h2>
-                                <p>Target Course: <strong> {{ selectedCourse.name }}</strong></p>
-                                <p>Source Template: <strong> {{ template.name }}</strong></p>
+                                <div v-for="course in selectedCourse" :key="course.id">
+                                    <p>Target Course: <strong> {{ course.name }}</strong></p>
+                                    <p>Source Template: <strong> {{ template.name }}</strong></p>
+                                </div>
                                 <div class="form-check">
                                   <label class="form-check-label">
                                     <input type="checkbox" class="form-check-input" v-model="acknowledge" name="" id="" value="on">
@@ -57,8 +60,8 @@
                                 <button @click="stage=1" class="btn btn-primary" ><i class="fas fa-arrow-left"></i> Back</button>
                                 <button class="btn btn-success" @click="triggerImport" v-if="!submitted" :disabled="!acknowledge">Import!</button>
 
-                                <div class="alert alert-success mt-2" role="alert"  v-if="submitted">
-                                    <strong>Woohoo!</strong> Templatron is importing this template into your <a :href="'https://canvas.umn.edu/courses/' + this.selectedCourse.id">Canvas site</a>. Please note that it may take a few minutes for the import process to complete.
+                                <div class="alert alert-success mt-2" role="alert"  v-if="submitted" v-for="course in selectedCourse" :key="course.id">
+                                    <strong>Woohoo!</strong> Templatron is importing this template into your <a :href="'https://canvas.umn.edu/courses/' + course.id">Canvas site</a>. Please note that it may take a few minutes for the import process to complete.
                                 </div>
                                 
                                 </div>
@@ -89,7 +92,7 @@
         methods: {
             triggerImport: function() {
                 axios.post("/api/canvas", {
-                    selectedCourse: this.selectedCourse.id,
+                    selectedCourse: this.selectedCourse.map(c => c.id),
                     template: this.template.id
                 })
                 .then(response => {

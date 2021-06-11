@@ -30,7 +30,7 @@
         },
         props: ["value", "accountid"],
         mounted() {
-            axios.get("/api/template?account_id=" + this.accountid)
+            axios.get("/api/template?account_ids=" + this.accountid)
                 .then(res => {
                     this.templates = res.data.templates;
                 });

@@ -13,12 +13,14 @@
 
             <small id="helpId" class="form-text text-muted">Enter the Course ID for the Canvas site into which you would like to import a template. The Course ID is a six digit number that you will see at the end of the Canvas site URL in your browser's address bar.</small>
             <template v-if="value">
-            <div class="mt-2 alert alert-danger" role="alert" v-if="value && value.workflow_state == 'available'">
-                <strong>Warning:</strong> This course has already been published.
+
+            <div v-for="course in value" :key="course.id">
+                    <div class="mt-2 alert alert-danger" role="alert" v-if="course && course.workflow_state == 'available'">
+                    <strong>Warning:</strong> This course has already been published.
+                </div>
+                <p><strong>Course Designator:</strong> {{ course.course_code }} </p>
+                <p><strong>Course Name:</strong> {{ course.name}} </p>
             </div>
-                <p><strong>Course Designator:</strong> {{ value.course_code }} </p>
-                <p><strong>Course Name:</strong> {{ value.name}} </p>
-                
             </template>
 
             <!-- <img src="/images/canvas_course_id.png"> -->

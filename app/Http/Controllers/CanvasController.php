@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use \App\Library\Canvas;
 use Auth;
 use Log;
+use Str;
 
 class CanvasController extends Controller
 {
@@ -38,30 +39,51 @@ class CanvasController extends Controller
     public function createMigration(Request $request) {
         
         $targetCourse = $request->get("selectedCourse");
-        $sourceCourse = $request->get("template");
-        Log::info("Starting migration for:" . $targetCourse . " " . $sourceCourse . " " . Auth::user()->emplid);
-        $migrationInfo = $this->canvas->createContentMigration($targetCourse, $sourceCourse);
-        return $migrationInfo->id;
-    }
-
-    public function validateUserCanMigrateCourse(Request $req, int $course) {
-        $user = Auth::user()->emplid;
-        $canvasUserInfo = $this->canvas->getUser($user);
-        $userList = $this->canvas->getTeachersForCourse($course);
-        if(collect($userList)->pluck("id")->contains($canvasUserInfo->id)) {
-            return response()->json($this->canvas->getCourse($course));
-        }
-        else {
-            // welp they're not attached to the course. We'll need to do the more expensive lookup.
-            $courseInfo =  $this->canvas->getCourse($course);
-            $adminsForSubaccount = $this->canvas->getAdminsForSubaccount($courseInfo->account_id, true);
-            if(collect($adminsForSubaccount)->filter(function($item) { 
-                return $item->role == "College/Program Assistant" || $item->role == "Instructor Course-Creation Support";
-            })->pluck("user.id")->contains($canvasUserInfo->id)) {
-                return response()->json($this->canvas->getCourse($course));
-            }
-
+        if(count($targetCourse)> 1 && !Auth::user()->admin) {
             abort(403);
         }
+        $sourceCourse = $request->get("template");
+        $migrationInfo = [];
+        foreach($targetCourse as $course) {
+            Log::info("Starting migration for:" . $course . " " . $sourceCourse . " " . Auth::user()->emplid);
+            $migrationInfo[] = $this->canvas->createContentMigration($course, $sourceCourse);
+        }
+        
+        return response()->json(collect($migrationInfo)->pluck("id"));
+    }
+
+    public function validateUserCanMigrateCourse(Request $req, string $course) {
+        $user = Auth::user()->emplid;
+        $canvasUserInfo = $this->canvas->getUser($user);
+
+        if(Str::contains($course, ',') && !Auth::user()->admin) {
+            abort(403);
+        }
+        $courseList = explode(",", $course);
+        array_walk($courseList, function($val) { return trim($val); });
+        
+        $courseReturnArray = [];
+        foreach($courseList as $course) {
+            $userList = $this->canvas->getTeachersForCourse($course);
+            if(collect($userList)->pluck("id")->contains($canvasUserInfo->id)) {
+                $courseReturnArray[] = $this->canvas->getCourse($course);
+            }
+            else {
+                // welp they're not attached to the course. We'll need to do the more expensive lookup.
+                $courseInfo =  $this->canvas->getCourse($course);
+                $adminsForSubaccount = $this->canvas->getAdminsForSubaccount($courseInfo->account_id, true);
+                if(collect($adminsForSubaccount)->filter(function($item) { 
+                    return $item->role == "College/Program Assistant" || $item->role == "Instructor Course-Creation Support";
+                })->pluck("user.id")->contains($canvasUserInfo->id)) {
+                    $courseReturnArray =$this->canvas->getCourse($course);
+                }
+            }
+        }
+
+        if(count($courseReturnArray) == 0) {
+            abort(403);
+        }
+
+        return response()->json($courseReturnArray);
     }
 }
