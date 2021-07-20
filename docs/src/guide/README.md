@@ -5,6 +5,9 @@ sidebarDepth: 2
 # Welcome to Templatron
 Templatron is a simple tool for selecting and importing a template into any University of Minnesota Canvas site in which you are a Teacher or a Designer. 
 
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/xzqQxj3vCTk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
 ## Using Templatron
 We recommend opening two tabs in a web browser to begin. Log into Canvas in the first browser and navigate to the Canvas site into which you want to import a template. We recommend that you only import templates into Canvas sites that have no content yet.
 

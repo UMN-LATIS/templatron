@@ -54,6 +54,9 @@ class CanvasController extends Controller
 
     public function validateUserCanMigrateCourse(Request $req, string $course) {
         $user = Auth::user()->emplid;
+        if(!is_int($user)) {
+            abort(403);
+        }
         $canvasUserInfo = $this->canvas->getUser($user);
 
         if(Str::contains($course, ',') && !Auth::user()->admin) {
